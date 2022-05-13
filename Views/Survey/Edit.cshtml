@@ -1,0 +1,118 @@
+﻿@model SurveyApplication.TblSurvey
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+        .form-control {
+            border: 1px solid #0080ff;
+        }
+    </style>
+</head>
+</html>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="row">
+            <diiv class="col-md-6 col-md-offset-3">
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group" style="margin-top:200px;">
+                        @Html.LabelFor(model => model.SurveyId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.SurveyId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.SurveyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FromDate, new { htmlAttributes = new { @class = "form-control", @id = "datepicker" } })
+                            @Html.ValidationMessageFor(model => model.FromDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ToDate, new { htmlAttributes = new { @class = "form-control", @id = "todate" } })
+                            @Html.ValidationMessageFor(model => model.ToDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn" style="background-color:#0e387a; color:white;" />
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <i class="fa fa-hand-o-left" style="color: #337ab7;"> @Html.ActionLink("Back to List", "Index")</i>
+                </div>
+            </diiv>
+        </div>
+    </div>
+}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.13.0.min.js"></script>
+<script>
+    //$(function () {
+    //    $("#datepicker").datepicker({
+    //        numberOfMonths: 1,
+    //        onSelect: function (selected) {
+    //            var dt = new Date(selected);
+    //            dt.setDate(dt.getDate() + 1);
+    //            $("#todate").datepicker("option", "minDate", dt);
+    //        }
+    //    });
+    //    $("#todate").datepicker({
+    //        onSelect: function (selected) {
+    //            var dt = new Date(selected);
+    //            dt.setDate(dt.getDate() - 1);
+    //            $("#datepicker").datepicker("option", "maxDate", dt);
+    //        }
+    //    });
+    //});
+    $(document).ready(function () {
+
+        $("#datepicker").datepicker({
+            dateFormat: "dd-M-yy",
+            minDate: 0,
+            onSelect: function () {
+                var dt2 = $('#todate');
+                var startDate = $(this).datepicker('getDate');
+                var minDate = $(this).datepicker('getDate');
+                var dt2Date = dt2.datepicker('getDate');
+                //difference in days. 86400 seconds in day, 1000 ms in second
+                var dateDiff = (dt2Date - minDate) / (86400 * 1000);
+
+                startDate.setDate(startDate.getDate() + 30);
+                if (dt2Date == null || dateDiff < 0) {
+                    dt2.datepicker('setDate', minDate);
+                }
+                else if (dateDiff > 30) {
+                    dt2.datepicker('setDate', startDate);
+                }
+                //sets dt2 maxDate to the last day of 30 days window
+                dt2.datepicker('option', 'maxDate', startDate);
+                dt2.datepicker('option', 'minDate', minDate);
+            }
+        });
+        $('#todate').datepicker({
+            dateFormat: "dd-M-yy",
+            minDate: 0
+        });
+    });
+</script>

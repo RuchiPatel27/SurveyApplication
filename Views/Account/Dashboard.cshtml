@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .field-validation-error {
+            color: red;
+        }
+        .fixed-header, .fixed-footer {
+            width: 100%;
+            position: fixed;
+            background: #333;
+            padding: 10px 0;
+            color: #fff;
+        }
+        .fixed-header {
+            top: 0;
+        }
+        .fixed-footer {
+            bottom: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .container-fluid.main {
+            position: relative;
+            padding: 0;
+        }
+        .navbar-default {
+            background-image: none;
+            background-color: transparent;
+            border-radius: 0px;
+            border: 0;
+            box-shadow: none;
+            padding: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+            .navbar-default .navbar-brand {
+                font-family: Verdana;
+                color: #ffffff;
+                font-size: 20px;
+            }
+                .navbar-default .navbar-brand:hover,
+                .navbar-default .navbar-brand:focus {
+                    color: #ffffff;
+                    background-color: transparent;
+                }
+            .navbar-default .navbar-nav > li > a {
+                color: #ffffff;
+            }
+                .navbar-default .navbar-nav > li > a:hover,
+                .navbar-default .navbar-nav > li > a:focus {
+                    color: #ffffff;
+                    background-color: transparent;
+                }
+            .navbar-default .navbar-toggle {
+                border-color: transparent;
+            }
+                .navbar-default .navbar-toggle:hover {
+                    background-color: transparent;
+                }
+                .navbar-default .navbar-toggle:focus {
+                    background-color: transparent;
+                }
+                .navbar-default .navbar-toggle .icon-bar {
+                    background-color: #ffffff;
+                }
+        .carousel .background {
+            background-position: center center;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            height: 750px;
+        }
+        @@media (max-width:991px) {
+            .carousel .background {
+                background-size: cover;
+            }
+        }
+        .carousel .background.a {
+            background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../Image/s2.jpg");
+        }
+        .carousel .background.b {
+            background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../Image/s2.jpg");
+        }
+        .carousel .background.c {
+            background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../Image/s2.jpg");
+        }
+        .carousel-fade .carousel-inner .item {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .carousel-fade .carousel-inner .active {
+            opacity: 1;
+        }
+        .carousel-fade .carousel-inner > .item.prev,
+        .carousel-fade .carousel-inner > .item.active.left {
+            opacity: 0;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+            .carousel-fade .carousel-inner > .item.next.left,
+            .carousel-fade .carousel-inner > .item.prev.right,
+            .carousel-fade .carousel-inner > .item.active {
+                opacity: 1;
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+        }
+        @@media all and (transform-3d), (-webkit-transform-3d) {
+            .carousel-fade .carousel-inner > .item.next,
+            .carousel-fade .carousel-inner > .item.active.right {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+            .carousel-fade .carousel-inner > .item.prev,
+            .carousel-fade .carousel-inner > .item.active.left {
+                opacity: 0;
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0);
+            }
+                .carousel-fade .carousel-inner > .item.next.left,
+                .carousel-fade .carousel-inner > .item.prev.right,
+                .carousel-fade .carousel-inner > .item.active {
+                    opacity: 1;
+                    -webkit-transform: translate3d(0, 0, 0);
+                    transform: translate3d(0, 0, 0);
+                }
+        }
+        .h1, .h2, .h3, h1, h2, h3 {
+            margin-top: unset !important;
+            margin-bottom: unset !important;
+        }
+        @@media print {
+            .no-print, .no-print * {
+                display: none !important;
+            }
+        }
+        .h3, h3 {
+            font-size: 34px;
+        }
+        .navbar-brand {
+            padding: 0px;
+            margin-left: 20px !important;
+        }
+            .navbar-brand > img {
+                height: 100%;
+                padding: 1px;
+                width: auto;
+            }
+    </style>
+</head>
+<body>
+    <div class="container-fluid main">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://disputebills.com"><img src="https://res.cloudinary.com/disputebills/image/upload/v1462474206/blue-mark_cnzgry.png">
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar" style="margin-left: 15px; margin-top: 10px; ">
+                    <ul class="nav navbar-nav">
+                        @if (Context.User.IsInRole("Admin"))
+                        {
+                        <li class="nav-item">
+                            <strong>@Html.Encode(User.Identity.Name)</strong>
+                            <a href="@Url.Action("OnlyAdminView","Home")" class="navbar-brand">Surveyor</a>
+                            <a href="@Url.Action("UserList","Home")" class="navbar-brand">Participator</a>
+                            <a href="@Url.Action("Logout","Account")" class="navbar-brand">Logout</a>
+                        </li>
+                        }
+                        @if (Context.User.IsInRole("Surveyor"))
+                        {
+                            <li class="nav-item">
+                                <strong>@Html.Encode(User.Identity.Name)</strong>
+                                <a href="@Url.Action("Index","Survey")" class="navbar-brand">Survey</a>
+                                <a href="@Url.Action("Logout","Account")" class="navbar-brand">Logout</a>
+                            </li>
+                        }
+                        @if (Context.User.IsInRole("User"))
+                        {
+                            <li class="nav-item">
+                                <strong>@Html.Encode(User.Identity.Name)</strong>
+                                <a href="@Url.Action("Index","Survey")" class="navbar-brand">Survey</a>
+                                <a href="@Url.Action("Logout","Account")" class="navbar-brand">Logout</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div id="myCarousel" class="carousel carousel-fade slide" data-ride="carousel" data-interval="3000">
+            <div class="carousel-inner" role="listbox">
+                <div class="item active background a"></div>
+            </div>
+        </div>
+    </div>
+    <div class="fixed-footer">
+        <div class="container">Copyright &copy; 2021</div>
+    </div>
+</body>
+</html>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+<script>
+    $('.carousel').carousel({
+        pause: "false"
+    });
+</script>

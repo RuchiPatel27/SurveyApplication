@@ -1,0 +1,72 @@
+﻿@model IEnumerable<SurveyApplication.TblQuestion>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
+<style>
+    .dataTables_length {
+        float: left;
+        height: 2.5em;
+        width: 40%;
+    }
+
+    .dataTables_filter {
+        float: right !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_paginate {
+        float: unset;
+        text-align: right;
+        white-space: nowrap;
+    }
+</style>
+<h5><a href="~/Survey/Index" style="margin-bottom:20px; margin-top:20px; margin-left:300px">Back to List of Survey</a></h5>
+<h2 style="text-align:center; margin-top:50px">Question List</h2>
+<div class="container">
+    <table id="myTable" class="display table">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Control Type</th>
+                <th>Control Options</th>
+                <th>Survey Title</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Question)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ControlType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ControlOptions)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TblSurvey.Title)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.QueId }) |
+                        @Html.ActionLink("Delete", "Edit", new { id = item.QueId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap.min.js"></script>
+<script>
+    $('#myTable').DataTable({
+        "dom": 'Blfrtip'
+    });
+</script>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c704cf74aec548ac89ae8523edd49fbc" Name="Diagram1">
+        <EntityTypeShape EntityType="ProductDBModel.TblQuestion" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProductDBModel.TblSurvey" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProductDBModel.TblUser" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProductDBModel.TblUserAnswer" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="ProductDBModel.FK__TblUserAn__QuesI__59FA5E80" ManuallyRouted="false" />
+        <AssociationConnector Association="ProductDBModel.FK_TblQuestion_TblSurvey" ManuallyRouted="false" />
+        <AssociationConnector Association="ProductDBModel.FK__TblUserAn__UserI__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="ProductDBModel.FK_TblSurvey_TblUser" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProductDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="TblQuestion">
+    <Key>
+      <PropertyRef Name="QueId" />
+    </Key>
+    <Property Name="QueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SurveyId" Type="Int32" />
+    <Property Name="Question" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ControlType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ControlOptions" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedON" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="TblUserAnswers" Relationship="Self.FK__TblUserAn__QuesI__59FA5E80" FromRole="TblQuestion" ToRole="TblUserAnswer" />
+    <NavigationProperty Name="TblSurvey" Relationship="Self.FK_TblQuestion_TblSurvey" FromRole="TblQuestion" ToRole="TblSurvey" />
+  </EntityType>
+  <EntityType Name="TblSurvey">
+    <Key>
+      <PropertyRef Name="SurveyId" />
+    </Key>
+    <Property Name="SurveyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FromDate" Type="DateTime" Precision="0" />
+    <Property Name="ToDate" Type="DateTime" Precision="0" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedON" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="TblQuestions" Relationship="Self.FK_TblQuestion_TblSurvey" FromRole="TblSurvey" ToRole="TblQuestion" />
+    <Property Name="UserId" Type="Int32" />
+    <NavigationProperty Name="TblUser" Relationship="ProductDBModel.FK_TblSurvey_TblUser" FromRole="TblSurvey" ToRole="TblUser" />
+  </EntityType>
+  <EntityType Name="TblUser">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DateofBirth" Type="DateTime" Precision="0" />
+    <Property Name="IsSurveyor" Type="Boolean" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TblUserAnswers" Relationship="Self.FK__TblUserAn__UserI__59063A47" FromRole="TblUser" ToRole="TblUserAnswer" />
+    <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TblSurveys" Relationship="ProductDBModel.FK_TblSurvey_TblUser" FromRole="TblUser" ToRole="TblSurvey" />
+  </EntityType>
+  <EntityType Name="TblUserAnswer">
+    <Key>
+      <PropertyRef Name="AnswerId" />
+    </Key>
+    <Property Name="AnswerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserAnswer" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="QuesId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TblQuestion" Relationship="Self.FK__TblUserAn__QuesI__59FA5E80" FromRole="TblUserAnswer" ToRole="TblQuestion" />
+    <NavigationProperty Name="TblUser" Relationship="Self.FK__TblUserAn__UserI__59063A47" FromRole="TblUserAnswer" ToRole="TblUser" />
+  </EntityType>
+  <Association Name="FK__TblUserAn__QuesI__59FA5E80">
+    <End Role="TblQuestion" Type="Self.TblQuestion" Multiplicity="1" />
+    <End Role="TblUserAnswer" Type="Self.TblUserAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblQuestion">
+        <PropertyRef Name="QueId" />
+      </Principal>
+      <Dependent Role="TblUserAnswer">
+        <PropertyRef Name="QuesId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TblQuestion_TblSurvey">
+    <End Role="TblSurvey" Type="Self.TblSurvey" Multiplicity="0..1" />
+    <End Role="TblQuestion" Type="Self.TblQuestion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblSurvey">
+        <PropertyRef Name="SurveyId" />
+      </Principal>
+      <Dependent Role="TblQuestion">
+        <PropertyRef Name="SurveyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__TblUserAn__UserI__59063A47">
+    <End Role="TblUser" Type="Self.TblUser" Multiplicity="1" />
+    <End Role="TblUserAnswer" Type="Self.TblUserAnswer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUser">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblUserAnswer">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ProductDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="TblQuestions" EntityType="Self.TblQuestion" />
+    <EntitySet Name="TblSurveys" EntityType="Self.TblSurvey" />
+    <EntitySet Name="TblUsers" EntityType="Self.TblUser" />
+    <EntitySet Name="TblUserAnswers" EntityType="Self.TblUserAnswer" />
+    <AssociationSet Name="FK__TblUserAn__QuesI__59FA5E80" Association="Self.FK__TblUserAn__QuesI__59FA5E80">
+      <End Role="TblQuestion" EntitySet="TblQuestions" />
+      <End Role="TblUserAnswer" EntitySet="TblUserAnswers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblQuestion_TblSurvey" Association="Self.FK_TblQuestion_TblSurvey">
+      <End Role="TblSurvey" EntitySet="TblSurveys" />
+      <End Role="TblQuestion" EntitySet="TblQuestions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__TblUserAn__UserI__59063A47" Association="Self.FK__TblUserAn__UserI__59063A47">
+      <End Role="TblUser" EntitySet="TblUsers" />
+      <End Role="TblUserAnswer" EntitySet="TblUserAnswers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TblSurvey_TblUser" Association="ProductDBModel.FK_TblSurvey_TblUser">
+      <End Role="TblUser" EntitySet="TblUsers" />
+      <End Role="TblSurvey" EntitySet="TblSurveys" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_TblSurvey_TblUser">
+    <End Type="ProductDBModel.TblUser" Role="TblUser" Multiplicity="0..1" />
+    <End Type="ProductDBModel.TblSurvey" Role="TblSurvey" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TblUser">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="TblSurvey">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

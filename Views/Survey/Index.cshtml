@@ -1,0 +1,114 @@
+﻿@model IEnumerable<SurveyApplication.TblSurvey>
+    @{ 
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
+<style>
+    .dataTables_length {
+        float: left;
+        height: 2.5em;
+        width: 40%;
+    }
+
+    .dataTables_filter {
+        float: right !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_paginate {
+        float: unset;
+        text-align: right;
+        white-space: nowrap;
+    }
+    
+</style>
+<h2 style="text-align:center; margin-top:95px">Survey List</h2>
+@if (Context.User.IsInRole("Surveyor"))
+{
+<div class="container">
+    <a class="popup btn btn-primary" href="~/Survey/Create" style="margin-bottom:20px; margin-top:20px;"><i class="fa fa-plus"></i>  Add New Survey</a>
+    <table id="surveyTable" class="display table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>FromDate</th>
+                <th>ToDate</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FromDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ToDate)
+                    </td>
+                    <td>
+                        <i class="fa fa-pencil-square"> @Html.ActionLink(" Edit", "Edit", new { id = item.SurveyId }) </i> | 
+                        <i class="fa fa-plus-square"> @Html.ActionLink("Add Question", "Create", "Question", new { id = item.SurveyId }, null)</i>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
+@if (Context.User.IsInRole("User"))
+{
+    <div class="container">
+        <table id="surveyTable" class="display table">
+            <thead>
+                <tr>
+                    <th>SurveyId</th>
+                    <th>Title</th>
+                    <th>FromDate</th>
+                    <th>ToDate</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SurveyId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FromDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ToDate)
+                        </td>
+                        <td>
+                            <i class="fa fa-eye" style="color: #337ab7;"> @Html.ActionLink("Question List", "Index", "Question", new { id = item.SurveyId }, null)</i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#surveyTable').DataTable({
+            "dom": 'Blfrtip',
+        });
+        $('#surveyTable').DataTable().order([0, 'asc']).draw();
+    });
+</script>

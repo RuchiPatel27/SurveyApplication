@@ -1,0 +1,142 @@
+﻿@model IEnumerable<SurveyApplication.TblQuestion>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">*@
+@*<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />*@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
+<style>
+    .dataTables_length {
+        float: left;
+        height: 2.5em;
+        width: 40%;
+    }
+
+    .dataTables_filter {
+        float: right !important;
+    }
+
+    div.dataTables_wrapper div.dataTables_paginate {
+        float: unset;
+        text-align: right;
+        white-space: nowrap;
+    }
+    .form-control {
+        border: 1px solid #0080ff;
+    }
+</style>
+<div>
+    <i class="fa fa-hand-o-left"> <a href="~/Survey/Index" style="margin-bottom:20px; margin-top:20px; margin-left:300px">Back to List of Survey</a></i>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap.min.js"></script>
+<script>
+    $('#myTable').DataTable({
+        "dom": 'Blfrtip'
+    });
+    $('#myTable').DataTable().order([0, 'asc']).draw();
+    $(document).ready(function () {
+        var divElement = $("<div style='background-color:green;width:300px;height:200px'><span id='span1'></span></div>")
+        divElement.each(function (index, elem) {
+            console.log(elem.tagName);
+        });
+        divElement.children('span').each(function (index, elem) {
+            console.log(elem.tagName);
+        });
+    })
+</script>
+<br />
+<br />
+<br />
+<br />
+
+<div id="div2" class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="form-group">
+                <div>
+                    <i class="fa fa-hand-o-left" style="color: #337ab7;"> <a href="~/Survey/Index" style="margin-bottom:20px; margin-top:20px;">Back to List of Survey</a></i>
+                </div>
+            </div>
+            <ol>
+                @{
+                    int k = 0;
+                    int l = 0;
+                }
+                @foreach (var p in ViewBag.data)
+                {
+                    <li>
+                        @p.Question
+                        <ul>
+                            @if (ViewBag.options[k] != "" && ViewBag.options[k] != null)
+                            {
+                                var arr = ViewBag.options[k];
+                                string[] array = arr.Split(',');
+                                foreach (var str in array)
+                                {
+                                    <input type="radio" id="@p.QuesId" name="@p.QuesId" value="@str"  />
+                                    @str
+                                }
+                            }
+                            @if (ViewBag.datas[l] == "text")
+                            {
+                                <input class="txt1 form-control" id="@p.QuesId" name="DynamicTextBox" type="text" value="" />
+                            }
+                            @if (ViewBag.datas[l] == "textarea")
+                            {
+                                <textarea id="@p.QuesId" rows="4" cols="50" class="form-control"></textarea>
+                            }
+                            @if (ViewBag.datas[l] == "TEXTAREA")
+                            {
+                                <textarea id="@p.QuesId" rows="4" cols="50" class="form-control"></textarea>
+                            }
+                        </ul>
+                    </li>
+                    k++;
+                    l++;
+                }
+            </ol>
+            <div class="form-group">
+                <input type="Submit" id="btnAdd" value="Submit" class="btn" style="background-color:#0e387a; color:white;" />
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    $('#btnAdd').click(function () {
+        //var radioValue = $("input[name='radio']:checked").val();
+        //if (radioValue) {
+        //    alert("selected " + radioValue);
+        //}
+        var statesAvailable = @Html.Raw(Json.Encode(@ViewBag.data));
+        for (var i = 0; i < statesAvailable.length; i++) {
+            var id = statesAvailable[i].QuesId;
+            var type = document.getElementById(id).type;
+            var answer = "";
+            if (type == "radio") {
+                answer = $('input[name="'+id+'"]:checked').val();
+            }
+            else
+                answer = $('#' + id).val();
+            $.ajax({
+                url: "/Question/AddUserAnswer",
+                type: "POST",
+                data: { 'QuesId': id, 'UserAnswer': answer },
+                success: function (data, textStatus, jqXHR) {
+                    console.log(data.message);
+                    window.location.href = '/Survey/Index';
+                },
+                error: function () {
+                    console.log("error handler when ajax request fails... ");
+                }
+            });
+        }
+    });
+</script>

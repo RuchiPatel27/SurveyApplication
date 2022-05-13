@@ -1,0 +1,348 @@
+﻿@model SurveyApplication.TblQuestion
+ 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">*@
+    @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .draggable {
+            margin-top: 50px;
+            margin-left: 55px;
+            border: solid black;
+            width: 160px;
+            height: 32px;
+        }
+
+        .draggables {
+            margin-top: 50px;
+            width: 170px;
+            height: 20px;
+            border: solid black;
+        }
+
+        #Container {
+            width: 600px;
+            margin-left: -210px;
+            height: 503px;
+            border: 1px solid;
+            overflow: hidden;
+            margin-top: 7px !important;
+            border-style: double;
+        }
+
+        #Title {
+            position: absolute;
+            font-family: sans-serif;
+            font-size: 30px;
+            width: 1024px;
+            left: 150px;
+            color: Red;
+            text-align: center;
+            height: 100px;
+        }
+
+        .block {
+            position: relative;
+            width: 100px;
+            height: 50px;
+            left: 0px;
+            top: 6px;
+            margin-bottom: 2px;
+        }
+
+        .block1 {
+            position: relative;
+            width: 200px;
+            height: 50px;
+            left: 0px;
+            top: 50px;
+            background-color: green;
+            margin-bottom: 2px;
+            border: 1px solid;
+        }
+
+        #listOfItems {
+            width: 250px;
+            height: 500px;
+            border: 1px solid;
+            overflow: hidden;
+            border-style: double;
+        }
+
+        .close {
+            position: relative;
+            height: 15px;
+            width: 12px;
+            left: 976px;
+            border: 1px solid red;
+            display: none;
+        }
+
+        .block:hover .close {
+            display: block;
+        }
+
+        .new_element_class {
+            width: 80%;
+            overflow: hidden;
+            height: auto;
+            padding: 10px 20px;
+        }
+
+        #Container input[type="text"] {
+            padding: 10px;
+            width: 35%;
+        }
+
+        .txt1 {
+            outline: 0;
+            border-width: 0 0 2px;
+        }
+
+        #btnAdd {
+            border: none;
+            padding: 0;
+            background: none;
+        }
+        .navbar-brand {
+            font-size:20px;
+        }
+        label{
+            font-size:15px;
+            font-weight:400;
+        }
+        .form-control {
+            border: 1px solid #0080ff;
+        }
+    </style>
+</head>
+<br />
+<br />
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @*<div>
+            <a href="~/Question/QuestionList" style="margin-bottom:20px; margin-top:20px; margin-left:300px">Back to List of Question</a>
+        </div>*@
+<div class="container">
+    <div class="form-group">
+        <div>
+            <a href="~/Survey/Index" style="margin-bottom:20px; margin-top:20px;"><i class="fa fa-hand-o-left"> Back to List of Survey</i></a>
+        </div>
+    </div>
+    <div class="row">
+        <h4 style="text-align:center">Add New Question</h4>
+        <div class="col-md-10">
+            <div class="form-horizontal">
+                <div id="myform">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Survey Name : @ViewBag.SurveyName</label>
+                            @Html.ValidationMessageFor(model => model.SurveyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Question, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Question, new { htmlAttributes = new { @class = "form-control", @id = "Question" } })
+                            @Html.ValidationMessageFor(model => model.Question, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h4 style="margin-left:44px">Choose Question Type</h4>
+                        <div class="col-sm-6">
+                            <div id="listOfItems" style="text-align: center; background-color: #efc8b1" class="block">
+                                <div id="TextBoxContainer" class="block">
+                                    <input id="btnAdd" type="button" value="Radio Button" />
+                                </div>
+                                <div id="txtbox" class="block">Text Box</div>
+                                <div id="txtfield" class="block">
+                                    Text Area
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div id="Container" style="background-color:#a9dce3;">
+                                <p id="demo"></p>
+                                <p id="demo1"></p>
+                                <p id="demo2"></p>
+                                <p id="demo3"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:10px">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="button" value="Create" id="btn" class="btn" style="background-color:#0e387a; color:white;" />
+                        </div>
+                    </div>
+                    <input id="text1" type="hidden" value="" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    @*<div id="listOfItems" style="text-align: center; margin-left: 295px;">
+            <div id="TextBoxContainer" class="block">
+                <input id="btnAdd" type="button" value="Radio Button" />
+            </div>
+            <div id="txtbox" class="block">
+                Text Box
+            </div>
+            <div id="txtfield" class="block">
+                Text Area
+            </div>
+        </div>
+        <div id="Container">
+            <p id="demo"></p>
+            <p id="demo1"></p>
+            <p id="demo2"></p>
+            <p id="demo3"></p>
+        </div>
+        <input id="text1" type="hidden" value="" />*@
+
+
+}
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<SCRIPT language="javascript">
+    $('#Container').sortable({
+        helper: 'clone',
+        receive: function (event, ui) {
+            var block_id = ui.item.attr('id');
+            var html='';
+            var a;
+            if (block_id == 'TextBoxContainer') {
+              
+                html = ' ';
+                html += '<div class="close">X</div>';
+            } else if (block_id == 'txtbox') {
+                $('.remove').remove();
+                $('.txt1').remove();
+                $('#textbox').remove();
+                $('#textarea').remove();
+                html = '';
+                html += '<div class="close">X</div>';
+                html += '<input type="text" name="txt_name" id="textbox" placeholder="your text here">';
+
+                ui.helper.removeAttr('style').addClass('new_element_class').html(html);
+                var y = document.getElementById("textbox").type;
+                document.getElementById("demo1").innerHTML = '';
+                document.getElementById("demo1").innerHTML = y;
+            } else if (block_id == 'txtfield') {
+                $('.remove').remove();
+                $('.txt1').remove();
+                $('#textbox').remove();
+                $('#textarea').remove();
+                html = '';
+                html += '<div class="close">X</div>';
+                html += '<textarea name="textarea_name" cols="40" rows="6" id="textarea"></textarea>';
+
+                ui.helper.removeAttr('style').addClass('new_element_class').html(html);
+                var x = document.getElementById("textarea").tagName;
+                document.getElementById("demo1").innerHTML ='';
+                document.getElementById("demo1").innerHTML = x;
+            } else if (block_id == 'TextBoxContainer') {
+                html = '';
+                html += '<div class="close">X</div>';
+            } else if (block_id == 'question') {
+                html = '';
+                html += '<input type="textarea" name="question">';
+            }
+        }
+    });
+     $('.block').draggable({
+        helper: 'clone',
+        connectToSortable: '#Container'
+     });
+    function selectScale(id, index) {
+        var divid = "scaleid" + index;
+        document.getElementById(divid).style.display = "block";
+    }
+    $('#btn').click(function () {
+        /*var y = document.getElementById("textbox").type;*/
+        var formData = new FormData();
+        var c = document.getElementById("demo1").innerHTML;
+        var viewbagitem = '@ViewBag.SurveyId';
+        var createdBy = '@ViewBag.SurveyName';
+        var td = $('#Question').val();
+        var text1 = '';
+        $('#Container').find('.txt1').each(function (index, Obj) {
+            if ($(Obj).val()) text1 += $(Obj).val() + ','
+        });
+        $('#text1').val(text1);
+        var options = text1.replace(/,\s*$/, "");
+        formData.append("Question", td);
+        formData.append("SurveyId", viewbagitem);
+        formData.append("ControlType", c);
+        formData.append("ControlOptions", options);
+        formData.append("CreatedBy", createdBy);
+        $.ajax(
+            {
+                url: '/Question/InsertData',
+                data: formData,
+                type: 'POST',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data, textStatus, jqXHR) {
+                    if (data.Status) {
+                        alert(data.Message);
+                        window.location.href = '/Survey/Index';
+                    }
+                    else {
+
+                    }
+                },
+                error: function () {
+                    console.log("error handler when ajax request fails... ");
+                },
+            });
+    });
+    $(function () {
+        $("#btnAdd").bind("click", function () {
+            var div = $("<div />");
+            $('#textbox').remove();
+            $('#textarea').remove();
+            document.getElementById("demo1").innerHTML = '';
+            div.html(GetDynamicTextBox(""));
+            $("#Container").append(div);
+            $('.txt1').change(function () {
+                UpdateData()
+            });
+        });
+        $("#btnGet").bind("click", function () {
+            var valuesarr = new Array();
+            var phonearr = new Array();
+            var phonearr1 = new Array();
+            $("input[name=DynamicTextBox]").each(function () {
+                valuesarr.push($(this).val());
+                $('#DynamicTextBox').val(valuesarr);
+            });
+            alert(valuesarr);
+        });
+        $("body").on("click", ".remove", function () {$(this).closest("div").remove();
+        });
+    });
+    function GetDynamicTextBox(value) {
+        return '<input class="txt1" name = "DynamicTextBox" type="text" value = "' + value + '" /><input  type="button" value="Remove" class="remove" />';
+    }
+    function UpdateData() {
+        var text1 = ''
+        $('#Container').find('.txt1').each(function (index, Obj) {
+            if ($(Obj).val()) text1 += $(Obj).val() + ','
+        })
+        $('#text1').val(text1)
+    }
+</SCRIPT>
